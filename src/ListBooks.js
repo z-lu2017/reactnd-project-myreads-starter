@@ -22,26 +22,32 @@ class ListBooks extends Component {
   }
 
   updateBook(book, shelf){
-    console.log("triggered, what is book", book)
-    BooksAPI.update().then((list)=>{
-      this.setState({list})
+    console.log("triggering")
+    BooksAPI.update(book, shelf).then((list)=>{
+      this.setState({list: list})
     })
   }
 
+  componentWillReceiveProps(nextProps){
+    this.setState({list: nextProps.list})
+  }
+
   render(){
-    var list = this.props.list;
+    var that = this;
     //categorizing
-    for (var i=0; i<list.length; i++){
-        if (list[i].shelf === "read"){
-          this.state.shelf.read.push(list[i]);
+    for (var i=0; i<that.state.list.length; i++){
+        if (that.state.list[i].shelf === "read"){
+          that.state.shelf.read.push(that.state.list[i]);
         }
-        if (list[i].shelf === "wantToRead"){
-          this.state.shelf.wantToRead.push(list[i]);
+        if (that.state.list[i].shelf === "wantToRead"){
+          that.state.shelf.wantToRead.push(that.state.list[i]);
         }
-        if (list[i].shelf === "currentlyReading"){
-          this.state.shelf.currentlyReading.push(list[i]);
+        if (that.state.list[i].shelf === "currentlyReading"){
+          that.state.shelf.currentlyReading.push(that.state.list[i]);
         }
     }
+
+
     //rendering
     return (
       <div className="shelf">
@@ -56,8 +62,8 @@ class ListBooks extends Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                   {
-                    this.state.shelf.currentlyReading.map(book => (
-                      <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={book.title} update={(book)=> this.updateBook(book, book.shelf)}/>
+                    this.state.shelf.currentlyReading.map( (book, index) => (
+                      <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={()=> that.updateBook(book, book.shelf)}/>
                     ))
                   }
                   </ol>
@@ -68,8 +74,8 @@ class ListBooks extends Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      this.state.shelf.wantToRead.map(book => (
-                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={book.title} update={(book)=> this.updateBook(book, book.shelf)}/>
+                      this.state.shelf.wantToRead.map( (book, index) => (
+                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={()=> that.updateBook(book, book.shelf)}/>
                       ))
                     }
                   </ol>
@@ -80,8 +86,8 @@ class ListBooks extends Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      this.state.shelf.read.map(book => (
-                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={book.title} update={(book)=> this.updateBook(book, book.shelf)}/>
+                      this.state.shelf.read.map( (book, index) => (
+                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={()=> that.updateBook(book, book.shelf)}/>
                       ))
                     }
                   </ol>

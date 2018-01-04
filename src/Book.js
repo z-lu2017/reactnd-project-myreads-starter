@@ -33,9 +33,9 @@ class Book extends Component {
               <div className="book-shelf-changer">
                 <select>
                   <option value="none" disabled>Move to...</option>
-                  <option value="currentlyReading" onClick={this.props.update(this.props.book)}>Currently Reading</option>
-                  <option value="wantToRead" onClick={this.props.update(this.props.book)}>Want to Read</option>
-                  <option value="read" onClick={this.props.update(this.props.book)}>Read</option>
+                  <option value="currentlyReading" onClick={this.props.update()}>Currently Reading</option>
+                  <option value="wantToRead" onClick={this.props.update()}>Want to Read</option>
+                  <option value="read" onClick={this.props.update()}>Read</option>
                   <option value="none">None</option>
                 </select>
               </div>
