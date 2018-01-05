@@ -1,53 +1,58 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import Book from './Book'
 import * as BooksAPI from './BooksAPI';
 
 class ListBooks extends Component {
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
     this.state = {
-      list: [],
-      shelf: {
-        read: [],
-        currentlyReading: [],
-        wantToRead: []
-      }
+      list: []
     };
   }
 
-  static propTypes = {
-    list: PropTypes.array.isRequired
-  }
-
-  updateBook(book, shelf){
-    console.log("triggering")
-    BooksAPI.update(book, shelf).then((list)=>{
-      this.setState({list: list})
+  componentDidMount(){
+    BooksAPI.getAll().then((list)=> {
+      this.setState({list})
     })
   }
 
-  componentWillReceiveProps(nextProps){
-    this.setState({list: nextProps.list})
+  updateBook(book, shelf){
+    var that = this;
+    BooksAPI.update(book, shelf).then((list)=>{
+      var oldList = that.state.list;
+      var newList = [];
+      for (var i=0; i<oldList.length; i++){
+        if (oldList[i].id !== book.id){
+          newList.push(oldList[i])
+        }
+      };
+      book.shelf = shelf
+      newList.push(book);
+      that.setState({list: newList});
+    })
   }
+
 
   render(){
     var that = this;
-    //categorizing
+    //clearing shelf and categorizing
+    var shelf = {
+      read: [],
+      wantToRead: [],
+      currentlyReading: []
+    }
     for (var i=0; i<that.state.list.length; i++){
         if (that.state.list[i].shelf === "read"){
-          that.state.shelf.read.push(that.state.list[i]);
+          shelf.read.push(that.state.list[i]);
         }
         if (that.state.list[i].shelf === "wantToRead"){
-          that.state.shelf.wantToRead.push(that.state.list[i]);
+          shelf.wantToRead.push(that.state.list[i]);
         }
         if (that.state.list[i].shelf === "currentlyReading"){
-          that.state.shelf.currentlyReading.push(that.state.list[i]);
+          shelf.currentlyReading.push(that.state.list[i]);
         }
     }
-
-
     //rendering
     return (
       <div className="shelf">
@@ -62,8 +67,8 @@ class ListBooks extends Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                   {
-                    this.state.shelf.currentlyReading.map( (book, index) => (
-                      <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={()=> that.updateBook(book, book.shelf)}/>
+                    shelf.currentlyReading.map( (book, index) => (
+                      <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={(e)=> that.updateBook(book, e)}/>
                     ))
                   }
                   </ol>
@@ -74,8 +79,8 @@ class ListBooks extends Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      this.state.shelf.wantToRead.map( (book, index) => (
-                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={()=> that.updateBook(book, book.shelf)}/>
+                      shelf.wantToRead.map( (book, index) => (
+                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={(e)=> that.updateBook(book, e)}/>
                       ))
                     }
                   </ol>
@@ -86,8 +91,8 @@ class ListBooks extends Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      this.state.shelf.read.map( (book, index) => (
-                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={()=> that.updateBook(book, book.shelf)}/>
+                      shelf.read.map( (book, index) => (
+                        <Book book={book} authors={book.authors} link={book.imageLinks.smallThumbnail} title={book.title} shelf={book.shelf} key={index} update={(e)=> that.updateBook(book, e)}/>
                       ))
                     }
                   </ol>

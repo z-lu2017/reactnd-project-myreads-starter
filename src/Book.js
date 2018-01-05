@@ -31,11 +31,11 @@ class Book extends Component {
             <div className="book-top">
               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.link})`}}></div>
               <div className="book-shelf-changer">
-                <select>
+                <select defaultValue='none' onChange={(e) => this.props.update(e.target.value)}>
                   <option value="none" disabled>Move to...</option>
-                  <option value="currentlyReading" onClick={this.props.update()}>Currently Reading</option>
-                  <option value="wantToRead" onClick={this.props.update()}>Want to Read</option>
-                  <option value="read" onClick={this.props.update()}>Read</option>
+                  <option value="currentlyReading">Currently Reading</option>
+                  <option value="wantToRead">Want to Read</option>
+                  <option value="read">Read</option>
                   <option value="none">None</option>
                 </select>
               </div>
