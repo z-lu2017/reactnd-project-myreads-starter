@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Popup from './Popup'
-import './Book.css'
+import ScrollLock from 'react-scrolllock';
 
 class Book extends Component {
   constructor(props){
@@ -42,6 +42,10 @@ class Book extends Component {
                   text={this.props.book.description}
                   closePopup={this.toggleModal.bind(this)}
                 />
+                : null
+              }
+              {this.state.isVisible ?
+                <ScrollLock />
                 : null
               }
             </div>
