@@ -5,12 +5,16 @@ import * as BooksAPI from './BooksAPI'
 import sortBy from 'sort-by'
 
 class Search extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       list: [],
       query: ""
     };
+  }
+
+  componentDidMount(){
+    console.log("called, anything on props.?", this.props)
   }
 
   updateBook(book, shelf){
@@ -24,12 +28,22 @@ class Search extends Component {
     var that = this;
     if (query) {
       BooksAPI.search(query).then((resp)=>{
-        if(resp){
+        if(resp.length >0){
           showingBook = resp;
-          showingBook.sort(sortBy('title'));
+          var verifiedBooks = showingBook.map(book => {
+            that.props.history.location.state.BooksOnShelf.forEach(bookOnShelf => {
+              // check wether book is already on shelf
+              if (book.id === bookOnShelf.id) {
+                // if yes get the shelf data from BooksOnShelf
+                book.shelf = bookOnShelf.shelf;
+              }
+            });
+
+            return book;
+          });
           that.setState({
             query: query.trim(),
-            list: showingBook
+            list: verifiedBooks
           })
         }
         else{
@@ -55,8 +69,12 @@ class Search extends Component {
 
 
   render(){
+    console.log("anything props?", this.props)
     const { query } = this.state
     var that = this
+    if (that.state.list.length>0){
+      that.state.list.sort(sortBy('title'));
+    }
     //cleaning the list, if there's no pic, use placeholder
     for (var i=0; i<that.state.list.length; i++){
       if (!that.state.list[i].imageLinks){

@@ -6,11 +6,6 @@ class Book extends Component {
   constructor(props){
     super(props);
     this.state = {
-      link: "",
-      title: "",
-      authors: [],
-      shelf: "",
-      book: {},
       isVisible: false
       }
     };
