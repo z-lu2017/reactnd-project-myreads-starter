@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import Book from './Book'
 import * as BooksAPI from './BooksAPI';
+import history from './history';
 
 class ListBooks extends Component {
   constructor(){
@@ -32,6 +33,14 @@ class ListBooks extends Component {
       that.setState({list: newList});
     })
   }
+
+  handleClick(e){
+    e.preventDefault();
+    history.push('/search', {
+      BooksOnShelf: this.state.list
+    })
+  }
+
 
 
   render(){
@@ -101,12 +110,7 @@ class ListBooks extends Component {
             </div>
           </div>
           <div className="open-search">
-            <Link to={{
-              pathname: '/search',
-              state: {
-                BooksOnShelf: that.state.list
-              }
-            }}>Add a book</Link>
+            <Link to={{pathname: '/search'}} onClick={(e)=> that.handleClick(e)}>Add a book</Link>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Book from './Book'
 import * as BooksAPI from './BooksAPI'
 import sortBy from 'sort-by'
+import PropTypes from 'prop-types';
 
 class Search extends Component {
   constructor(props){
@@ -11,10 +12,6 @@ class Search extends Component {
       list: [],
       query: ""
     };
-  }
-
-  componentDidMount(){
-    console.log("called, anything on props.?", this.props)
   }
 
   updateBook(book, shelf){
@@ -43,7 +40,7 @@ class Search extends Component {
           });
           that.setState({
             query: query.trim(),
-            list: verifiedBooks
+            list: showingBook
           })
         }
         else{
@@ -69,7 +66,6 @@ class Search extends Component {
 
 
   render(){
-    console.log("anything props?", this.props)
     const { query } = this.state
     var that = this
     if (that.state.list.length>0){
