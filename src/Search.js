@@ -24,7 +24,7 @@ class Search extends Component {
     var showingBook = [];
     var that = this;
     if (query) {
-      BooksAPI.search(query).then((resp)=>{
+      BooksAPI.search(query.trim()).then((resp)=>{
         if(resp.length >0){
           showingBook = resp;
           var verifiedBooks = showingBook.map(book => {
@@ -39,12 +39,11 @@ class Search extends Component {
             return book;
           });
           that.setState({
-            query: query.trim(),
+            query: query,
             list: showingBook
           })
         }
         else{
-          alert("NO RESULT FOUND!");
           that.setState({
             query: "",
             list: []

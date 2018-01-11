@@ -5,9 +5,6 @@ import Search from './Search'
 import './App.css'
 
 class BooksApp extends React.Component {
-  state = {
-    list : []
-  }
 
   render() {
     return (

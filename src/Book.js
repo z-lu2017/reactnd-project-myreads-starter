@@ -17,6 +17,10 @@ class Book extends Component {
     }
 
   render(){
+    //check if book has an image, if not use placeholder
+    if (!this.props.book.imageLinks.smallThumbnail){
+      this.props.book.imageLinks.smallThumbnail = "http://via.placeholder.com/128x193";
+    }
     return(
       <div className="Book">
         <li>
@@ -24,7 +28,7 @@ class Book extends Component {
             <div className="book-top">
               <div className="book-cover" onClick={this.toggleModal.bind(this)} style={{ width: 128, height: 193, backgroundImage: `url(${this.props.link})`}}></div>
               <div className="book-shelf-changer">
-                <select defaultValue='none' onChange={(e) => this.props.update(e.target.value)}>
+                <select defaultValue={this.props.shelf || 'none'} onChange={(e) => this.props.update(e.target.value)}>
                   <option value="none" disabled>Move to...</option>
                   <option value="currentlyReading">Currently Reading</option>
                   <option value="wantToRead">Want to Read</option>
@@ -45,7 +49,9 @@ class Book extends Component {
               }
             </div>
             <div className="book-title">{this.props.title}</div>
-            <div className="book-authors">{this.props.authors}</div>
+            <div className="book-authors">
+              {this.props.authors ? this.props.authors.join(', ') : ''}
+            </div>
           </div>
         </li>
       </div>
