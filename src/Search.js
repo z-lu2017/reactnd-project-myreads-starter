@@ -35,8 +35,6 @@ class Search extends Component {
                 book.shelf = bookOnShelf.shelf;
               }
             });
-
-            return book;
           });
           that.setState({
             query: query,
