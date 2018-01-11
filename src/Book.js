@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Popup from './Popup'
+import Popup from './Popup';
 import ScrollLock from 'react-scrolllock';
+import { If, Then, Else } from 'react-if';;
 
 class Book extends Component {
   constructor(props){
@@ -28,7 +29,7 @@ class Book extends Component {
             <div className="book-top">
               <div className="book-cover" onClick={this.toggleModal.bind(this)} style={{ width: 128, height: 193, backgroundImage: `url(${this.props.link})`}}></div>
               <div className="book-shelf-changer">
-                <select defaultValue={this.props.shelf || 'none'} onChange={(e) => this.props.update(e.target.value)}>
+                <select value={this.props.shelf || 'none'} onChange={(e) => this.props.update(e.target.value)}>
                   <option value="none" disabled>Move to...</option>
                   <option value="currentlyReading">Currently Reading</option>
                   <option value="wantToRead">Want to Read</option>
@@ -36,17 +37,16 @@ class Book extends Component {
                   <option value="none">None</option>
                 </select>
               </div>
-              {this.state.isVisible ?
-                <Popup
-                  text={this.props.book.description}
-                  closePopup={this.toggleModal.bind(this)}
-                />
-                : null
-              }
-              {this.state.isVisible ?
-                <ScrollLock />
-                : null
-              }
+              <If condition={ this.state.isVisible === true }>
+                   <Then>
+                     <Popup text={this.props.book.description} closePopup={this.toggleModal.bind(this)}/>
+                  </Then>
+               </If>
+               <If condition={ this.state.isVisible === true }>
+                    <Then>
+                       <ScrollLock />
+                   </Then>
+                </If>
             </div>
             <div className="book-title">{this.props.title}</div>
             <div className="book-authors">
